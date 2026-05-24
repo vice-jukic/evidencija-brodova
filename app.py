@@ -125,6 +125,54 @@ def detalji_broda(brod_id):
         "opis": brod.opis
     }), 200
 
+# Uređivanje postojećeg broda
+@app.route("/uredi-brod/<int:brod_id>", methods=["PUT"])
+@orm.db_session
+def uredi_brod(brod_id):
+    brod = Brod.get(id=brod_id)
+    
+    if not brod:
+        return jsonify({
+            "response": "Error",
+            "message": f"Brod s ID-em {brod_id} ne postoji!"
+        }), 404
+    
+    try:
+        zadnji_servis = None
+        datum_servisa = request.form.get("zadnji_servis")
+
+        if datum_servisa:
+            zadnji_servis = datetime.strptime(datum_servisa, "%Y-%m-%d")
+
+        # ažuriranje podataka    
+        brod.naziv = request.form["naziv"]
+        brod.naziv = request.form["naziv"]
+        brod.tip = request.form["tip"]
+        brod.duljina = float(request.form["duljina"])
+        brod.godina = int(request.form["godina"])
+        brod.ima_jedra = "ima_jedra" in request.form
+        brod.ima_tende = "ima_tende" in request.form
+        brod.oprema = request.form["oprema"]
+        brod.opis = request.form["opis"]
+        brod.zadnji_servis = zadnji_servis
+
+        orm.commit()
+
+        return jsonify({
+            "response": "Success",
+            "message": "Brod uspješno ažuriran!",
+            "brod": {
+                "id": brod.id,
+                "naziv": brod.naziv,
+                "tip": brod.tip
+            }
+        }), 200
+    
+    except Exception as e:
+        return jsonify({
+            "repsonse": "Error",
+            "message": str(e)
+        }), 400
 
 @app.route("/")
 def home():
