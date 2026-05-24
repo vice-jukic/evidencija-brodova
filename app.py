@@ -196,10 +196,8 @@ def obrisi_brod(brod_id):
 
 
 @app.route("/")
-def home():
-    return jsonify({
-        "message": "Evidencija brodova radi!"
-    }), 200
+def pocetna():
+    return render_template("pocetna.html")
 
 if __name__ == "__main__":
     app.run(port=5000)
