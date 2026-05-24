@@ -130,7 +130,7 @@ def detalji_broda(brod_id):
 @orm.db_session
 def uredi_brod(brod_id):
     brod = Brod.get(id=brod_id)
-    
+
     if not brod:
         return jsonify({
             "response": "Error",
@@ -173,6 +173,27 @@ def uredi_brod(brod_id):
             "repsonse": "Error",
             "message": str(e)
         }), 400
+
+# Brisanje broda po ID-u
+@app.route("/obrisi-brod/<int:brod_id>", methods=["DELETE"])
+@orm.db_session
+def obrisi_brod(brod_id):
+    brod = Brod.get(id=brod_id)
+    if not brod:
+        return jsonify({
+            "response": "Error",
+            "message": f"Brod s ID-em {brod_id} ne postoji!"
+        }), 404
+    
+    # brisanje broda iz baze i spremanje promjena
+    brod.delete()
+    orm.commit()
+
+    return jsonify({
+        "response": "Success",
+        "message": f"Brod s ID-em {brod_id} je obrisan!"
+    }), 200
+
 
 @app.route("/")
 def home():
