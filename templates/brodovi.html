@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">Popis brodova</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Tip</th>
+            <th>Duljina</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for brod in brodovi %}
+        <tr>
+            <td>{{ brod.id }}</td>
+            <td>{{ brod.naziv }}</td>
+            <td>{{ brod.tip }}</td>
+            <td>{{ brod.duljina }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
