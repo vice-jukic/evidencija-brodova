@@ -22,6 +22,64 @@ app.jinja_env.globals.update(formatiraj_datum=formatiraj_datum)
 def datum_servisa(brod):
     return brod.zadnji_servis
 
+def statistika_tipova(brodovi):
+    tipovi = {}
+
+    for brod in brodovi:
+        if brod.tip in tipovi:
+            tipovi[brod.tip] += 1
+        else:
+            tipovi[brod.tip] = 1
+
+    return tipovi
+
+def statistika_servisa(brodovi):
+    servis_u_redu = 0
+    servis_kasni = 0
+    bez_servisa = 0
+
+    granica_servisa = datetime.now() - timedelta(days=365)
+
+    for brod in brodovi:
+        if brod.zadnji_servis is None:
+            bez_servisa += 1
+        elif brod.zadnji_servis < granica_servisa:
+            servis_kasni += 1
+        else:
+            servis_u_redu += 1
+    
+    return servis_u_redu, servis_kasni, bez_servisa
+
+def statistika_starosti(brodovi):
+    mladi_brodovi = 0
+    srednji_brodovi = 0
+    stari_brodovi = 0
+
+    trenutna_godina = datetime.now().year
+
+    for brod in brodovi:
+        starost = trenutna_godina - brod.godina
+
+        if starost <= 10:
+            mladi_brodovi += 1
+        elif starost <= 20:
+            srednji_brodovi += 1
+        else:
+            stari_brodovi += 1
+    
+    return mladi_brodovi, srednji_brodovi, stari_brodovi
+
+def brodovi_za_servis(brodovi):
+    lista = []
+
+    for brod in brodovi:
+        if brod.zadnji_servis:
+            lista.append(brod)
+        
+    lista.sort(key=datum_servisa)
+
+    return lista[:5]
+
 # Dodavanje broda u bazu
 @app.route("/dodaj-brod", methods=["GET", "POST"])
 @orm.db_session # omogućuje komunikaciju s bazom
@@ -152,63 +210,20 @@ def pocetna():
 @app.route("/statistika")
 @orm.db_session
 def statistika():
-    brodovi = Brod.select()
+    brodovi = list(Brod.select())
 
-    ukupno_brodova = 0
-    servis_u_redu = 0
-    servis_kasni = 0
-    bez_servisa = 0
-    mladi_brodovi = 0
-    srednji_brodovi = 0
-    stari_brodovi = 0
-
-    tipovi = {}
-    brodovi_za_servis = []
-    granica_servisa = datetime.now() - timedelta(days=365)
-    trenutna_godina = datetime.now().year
-    
-    for brod in brodovi:
-        if brod.tip in tipovi:
-            tipovi[brod.tip] += 1
-        else:
-            tipovi[brod.tip] = 1
-
-        ukupno_brodova += 1
-        
-        # brodovi koji imaju evidentiran servis
-        if brod.zadnji_servis:
-            brodovi_za_servis.append(brod)
-        
-        if brod.zadnji_servis is None:
-            bez_servisa += 1
-        elif brod.zadnji_servis < granica_servisa:
-            servis_kasni += 1
-        else:
-            servis_u_redu += 1
-
-        starost = trenutna_godina - brod.godina
-
-        if starost <= 10:
-            mladi_brodovi += 1
-        elif starost <= 20:
-            srednji_brodovi += 1
-        else:
-            stari_brodovi += 1
-
-    brodovi_za_servis.sort(key=datum_servisa)
+    tipovi = statistika_tipova(brodovi)
+    servis_u_redu, servis_kasni, bez_servisa = statistika_servisa(brodovi)
+    mladi_brodovi, srednji_brodovi, stari_brodovi = statistika_starosti(brodovi)
+    lista_servisa = brodovi_za_servis(brodovi)
 
     return render_template(
         "statistika.html",
         tipovi=tipovi,
-        ukupno_brodova=ukupno_brodova,
-        servis_u_redu=servis_u_redu,
-        servis_kasni=servis_kasni,
-        bez_servisa=bez_servisa,
-        mladi_brodovi=mladi_brodovi,
-        srednji_brodovi=srednji_brodovi,
-        stari_brodovi=stari_brodovi,
-        brodovi_za_servis=brodovi_za_servis[:5]
-        )
+        servis_u_redu=servis_u_redu, servis_kasni=servis_kasni, bez_servisa=bez_servisa,
+        mladi_brodovi=mladi_brodovi, srednji_brodovi=srednji_brodovi, stari_brodovi=stari_brodovi,
+        brodovi_za_servis=lista_servisa
+    )
 
 @app.errorhandler(404)
 def stranica_nije_pronadena(error):
