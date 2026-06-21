@@ -210,5 +210,9 @@ def statistika():
         brodovi_za_servis=brodovi_za_servis[:5]
         )
 
+@app.errorhandler(404)
+def stranica_nije_pronadena(error):
+    return render_template("404.html"), 404
+
 if __name__ == "__main__":
     app.run(port=5000)
