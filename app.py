@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pony import orm
 from datetime import datetime
 
@@ -46,7 +46,7 @@ def dodaj_brod():
             if datum_servisa:
                 zadnji_servis = datetime.strptime(datum_servisa, "%Y-%m-%d")
             
-            novi_brod = Brod(
+            Brod(
                 naziv = request.form["naziv"],
                 tip = request.form["tip"],
                 duljina = float(request.form["duljina"]),
@@ -58,18 +58,10 @@ def dodaj_brod():
                 zadnji_servis = zadnji_servis
             )
 
-            orm.commit() # spremanje promjena u bazu
+            # spremanje promjena u bazu
+            orm.commit()
 
-            return jsonify({
-                "response": "Success",
-                "message": "Brod uspješno dodan",
-                "brod": {
-                    "id": novi_brod.id,
-                    "naziv": novi_brod.naziv,
-                    "tip": novi_brod.tip,
-                    "zadnji_servis": formatiraj_datum(novi_brod.zadnji_servis)
-                }
-            }), 201
+            return redirect(url_for("pregled_brodova"))
     
         except Exception as e:
             return jsonify({
@@ -82,23 +74,7 @@ def dodaj_brod():
 @orm.db_session
 def pregled_brodova():
     brodovi = Brod.select()
-    rezultat = []
-
-    for brod in brodovi:
-        rezultat.append({
-            "id": brod.id,
-            "naziv": brod.naziv,
-            "tip": brod.tip,
-            "duljina": brod.duljina,
-            "godina": brod.godina,
-            "ima_jedra": brod.ima_jedra,
-            "ima_tende": brod.ima_tende,
-            "oprema": brod.oprema,
-            "zadnji_servis": formatiraj_datum(brod.zadnji_servis),
-            "opis": brod.opis
-        })
-    
-    return jsonify(rezultat), 200
+    return render_template("brodovi.html", brodovi=brodovi)
 
 # Dohvaćanje jednog broda po ID-u
 @app.route("/brod/<int:brod_id>", methods=["GET"])
@@ -112,30 +88,23 @@ def detalji_broda(brod_id):
         }), 404
     
     # vraćanje podataka o brodu
-    return jsonify({
-        "id": brod.id,
-        "naziv": brod.naziv,
-        "tip": brod.tip,
-        "duljina": brod.duljina,
-        "godina": brod.godina,
-        "ima_jedra": brod.ima_jedra,
-        "ima_tende": brod.ima_tende,
-        "oprema": brod.oprema,
-        "zadnji_servis": formatiraj_datum(brod.zadnji_servis),
-        "opis": brod.opis
-    }), 200
+    return render_template("detalji_broda.html", brod=brod)
 
 # Uređivanje postojećeg broda
-@app.route("/uredi-brod/<int:brod_id>", methods=["PUT"])
+@app.route("/uredi-brod/<int:brod_id>", methods=["GET", "POST"])
 @orm.db_session
 def uredi_brod(brod_id):
     brod = Brod.get(id=brod_id)
 
+    # ako brod ne postoji
     if not brod:
         return jsonify({
             "response": "Error",
             "message": f"Brod s ID-em {brod_id} ne postoji!"
         }), 404
+    
+    if request.method == "GET":
+        return render_template("uredi_brod.html", brod=brod)
     
     try:
         zadnji_servis = None
@@ -145,7 +114,6 @@ def uredi_brod(brod_id):
             zadnji_servis = datetime.strptime(datum_servisa, "%Y-%m-%d")
 
         # ažuriranje podataka    
-        brod.naziv = request.form["naziv"]
         brod.naziv = request.form["naziv"]
         brod.tip = request.form["tip"]
         brod.duljina = float(request.form["duljina"])
@@ -158,24 +126,16 @@ def uredi_brod(brod_id):
 
         orm.commit()
 
-        return jsonify({
-            "response": "Success",
-            "message": "Brod uspješno ažuriran!",
-            "brod": {
-                "id": brod.id,
-                "naziv": brod.naziv,
-                "tip": brod.tip
-            }
-        }), 200
+        return redirect(url_for("detalji_broda", brod_id=brod.id))
     
     except Exception as e:
         return jsonify({
-            "repsonse": "Error",
+            "response": "Error",
             "message": str(e)
         }), 400
 
 # Brisanje broda po ID-u
-@app.route("/obrisi-brod/<int:brod_id>", methods=["DELETE"])
+@app.route("/obrisi-brod/<int:brod_id>", methods=["POST"])
 @orm.db_session
 def obrisi_brod(brod_id):
     brod = Brod.get(id=brod_id)
@@ -189,10 +149,7 @@ def obrisi_brod(brod_id):
     brod.delete()
     orm.commit()
 
-    return jsonify({
-        "response": "Success",
-        "message": f"Brod s ID-em {brod_id} je obrisan!"
-    }), 200
+    return redirect(url_for("pregled_brodova"))
 
 
 @app.route("/")
