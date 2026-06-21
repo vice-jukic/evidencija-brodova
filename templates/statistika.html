@@ -4,12 +4,65 @@
 
 <h1 class="mb-4">Statistika</h1>
 
-<canvas id="tipoviChart"></canvas>
+<style>
+    canvas {
+        max-height: 300px;
+    }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h4>Broj brodova po tipu</h4>
+            <canvas id="tipoviChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h4>Starost brodova</h4>
+            <canvas id="starostChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h4>Brodovi kojima servis najduže nije obavljen</h4>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Naziv</th>
+                        <th>Tip</th>
+                        <th>Zadnji servis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brod in brodovi_za_servis %}
+                    <tr>
+                        <td>{{ brod.naziv }}</td>
+                        <td>{{ brod.tip }}</td>
+                        <td>{{ formatiraj_datum(brod.zadnji_servis) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h4>Status servisa</h4>
+            <canvas id="servisChart"></canvas>
+        </div>
+    </div>
+</div>
+
 <script>
+    // Broj brodova po tipu
     const labels = {{ tipovi.keys() | list | tojson | safe }};
-    const data = {{ tipovi.values() | list | tojson | safe}};
+    const data = {{ tipovi.values() | list | tojson | safe }};
 
     new Chart(document.getElementById("tipoviChart"), {
         type: "bar",
@@ -21,47 +74,17 @@
             }]
         }
     });
-</script>
-
-<h2 class="mt-5">Brodovi kojima servis najduže nije obavljen</h2>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Naziv</th>
-            <th>Tip</th>
-            <th>Zadnji servis</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for brod in brodovi_za_servis %}
-        <tr>
-            <td>{{ brod.naziv }}</td>
-            <td>{{ brod.tip }}</td>
-            <td>{{ formatiraj_datum(brod.zadnji_servis) }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2 class="mt-5">Status servisa</h2>
-
-<canvas id="servisChart"></canvas>
-
-<script>
+    // Status servisa
     const servisLabels = [
         "Servis unutar godine",
         "Servis stariji od godinu dana",
         "Nema evidentiran servis"
     ];
-
     const servisData = [
         {{ servis_u_redu }},
         {{ servis_kasni }},
         {{ bez_servisa }}
     ];
-
     new Chart(document.getElementById("servisChart"), {
         type: "pie",
         data: {
@@ -71,24 +94,17 @@
             }]
         }
     });
-</script>
-<h2 class="mt-5">Starost brodova</h2>
-
-<canvas id="starostChart"></canvas>
-
-<script>
+    // Starost brodova
     const starostLabels = [
         "Do 10 godina",
         "10 - 20 godina",
         "Više od 20 godina"
     ];
-
     const starostData = [
         {{ mladi_brodovi }},
         {{ srednji_brodovi }},
         {{ stari_brodovi }}
     ];
-
     new Chart(document.getElementById("starostChart"), {
         type: "pie",
         data: {
@@ -100,4 +116,4 @@
     });
 </script>
 
-{% endblock%}
+{% endblock %}
