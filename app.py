@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pony import orm
-from datetime import datetime
+from datetime import datetime, timedelta
 
 db = orm.Database()
 
@@ -28,6 +28,11 @@ def formatiraj_datum(datum):
     if datum:
         return datum.strftime("%d-%m-%Y")
     return ""
+
+app.jinja_env.globals.update(formatiraj_datum=formatiraj_datum)
+
+def datum_servisa(brod):
+    return brod.zadnji_servis
 
 # Dodavanje broda u bazu
 @app.route("/dodaj-brod", methods=["GET", "POST"])
@@ -155,6 +160,67 @@ def obrisi_brod(brod_id):
 @app.route("/")
 def pocetna():
     return render_template("pocetna.html")
+
+@app.route("/statistika")
+@orm.db_session
+def statistika():
+    brodovi = Brod.select()
+
+    ukupno_brodova = 0
+    servis_u_redu = 0
+    servis_kasni = 0
+    bez_servisa = 0
+    mladi_brodovi = 0
+    srednji_brodovi = 0
+    stari_brodovi = 0
+
+    tipovi = {}
+    brodovi_za_servis = []
+    granica_servisa = datetime.now() - timedelta(days=365)
+    trenutna_godina = datetime.now().year
+    
+    for brod in brodovi:
+        if brod.tip in tipovi:
+            tipovi[brod.tip] += 1
+        else:
+            tipovi[brod.tip] = 1
+
+        ukupno_brodova += 1
+        
+        # brodovi koji imaju evidentiran servis
+        if brod.zadnji_servis:
+            brodovi_za_servis.append(brod)
+        
+        if brod.zadnji_servis is None:
+            bez_servisa += 1
+        elif brod.zadnji_servis < granica_servisa:
+            servis_kasni += 1
+        else:
+            servis_u_redu += 1
+
+        starost = trenutna_godina - brod.godina
+
+        if starost <= 10:
+            mladi_brodovi += 1
+        elif starost <= 20:
+            srednji_brodovi += 1
+        else:
+            stari_brodovi += 1
+
+    brodovi_za_servis.sort(key=datum_servisa)
+
+    return render_template(
+        "statistika.html",
+        tipovi=tipovi,
+        ukupno_brodova=ukupno_brodova,
+        servis_u_redu=servis_u_redu,
+        servis_kasni=servis_kasni,
+        bez_servisa=bez_servisa,
+        mladi_brodovi=mladi_brodovi,
+        srednji_brodovi=srednji_brodovi,
+        stari_brodovi=stari_brodovi,
+        brodovi_za_servis=brodovi_za_servis[:5]
+        )
 
 if __name__ == "__main__":
     app.run(port=5000)
