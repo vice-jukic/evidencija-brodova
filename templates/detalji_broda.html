@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">{{ brod.naziv }}</h1>
+
+<div calss="card">
+    <div class="card-body">
+        <p><strong>Tip:</strong> {{ brod.tip }}</p>
+        <p><strong>Duljina:</strong> {{ brod.duljina }}m</p>
+        <p><strong>Godina:</strong> {{ brod.godina }}</p>
+        <p>
+            <strong>Ima jedra:</strong>
+            {% if brod.ima_jedra %}
+            Da
+            {% else %}
+            Ne
+            {% endif %}
+        </p>
+        <p>
+            <strong>Ima tende:</strong>
+            {% if brod.ima_tende %}
+            Da
+            {% else %}
+            Ne
+            {% endif %}
+        </p>
+        <p><strong>Oprema:</strong> {{ brod.oprema }}</p>
+        <p>
+            <strong>Zadnji servis:</strong>
+            {% if brod.zadnji_servis %}
+                {{ brod.zadnji_servis.strftime("%d-%m-%Y") }}
+            {% else %}
+                Nije evidentirano
+            {% endif %}
+        </p>
+        <p><strong>Opis:</strong></p>
+        <p>{{ brod.opis }}</p>
+    </div>
+</div>
+<div class="mt-4">
+    <a href="/uredi-brod/{{ brod.id }}" class="btn btn-warning">Uredi</a>
+    <form action="/obrisi-brod/{{ brod.id }}" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-danger">Obriši</button>
+    </form>
+    <a href="/brodovi" class="btn btn-secondary">Natrag na popis</a>
+</div>
+{% endblock %}

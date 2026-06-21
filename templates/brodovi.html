@@ -20,6 +20,9 @@
             <td>{{ brod.naziv }}</td>
             <td>{{ brod.tip }}</td>
             <td>{{ brod.duljina }}m</td>
+            <td>
+                <a href="/brod/{{ brod.id }}" class="btn btn-primary btn-sm">Detalji</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
