@@ -8,19 +8,27 @@
     canvas {
         max-height: 300px;
     }
+
+    .card {
+        height: 100%;
+    }
+
+    .row {
+        align-items: stretch;
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card p-3">
+    <div class="col-md-6 mb-4 d-flex">
+        <div class="card p-3 w-100">
             <h4>Broj brodova po tipu</h4>
             <canvas id="tipoviChart"></canvas>
         </div>
     </div>
-    <div class="col-md-6 mb-4">
-        <div class="card p-3">
+    <div class="col-md-6 mb-4 d-flex">
+        <div class="card p-3 w-100">
             <h4>Starost brodova</h4>
             <canvas id="starostChart"></canvas>
         </div>
@@ -28,8 +36,8 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card p-3">
+    <div class="col-md-6 mb-4 d-flex">
+        <div class="card p-3 w-100">
             <h4>Brodovi kojima servis najduže nije obavljen</h4>
             <table class="table table-striped mt-3">
                 <thead>
@@ -51,8 +59,8 @@
             </table>
         </div>
     </div>
-    <div class="col-md-6 mb-4">
-        <div class="card p-3">
+    <div class="col-md-6 mb-4 d-flex">
+        <div class="card p-3 w-100">
             <h4>Status servisa</h4>
             <canvas id="servisChart"></canvas>
         </div>
@@ -115,5 +123,6 @@
         }
     });
 </script>
+<hr>
 
 {% endblock %}

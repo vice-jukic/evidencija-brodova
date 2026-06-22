@@ -5,10 +5,8 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-
-# Povezivanje aplikacije sa SQLite bazom
+# Spajanje na SQLite bazu i kreiranje tablica ako još ne postoje
 db.bind(provider="sqlite", filename="database.sqlite", create_db=True)
-# Kreiranje tablica iz modela ako još ne postoje
 db.generate_mapping(create_tables=True)
 
 # Pretvaranje datetime objekta u čitljiv datum
@@ -17,11 +15,14 @@ def formatiraj_datum(datum):
         return datum.strftime("%d-%m-%Y")
     return ""
 
+# Dostupno u svim html predlošcima
 app.jinja_env.globals.update(formatiraj_datum=formatiraj_datum)
 
+# Koristi se za sortiranje brodova po datumu zadnjeg servisa
 def datum_servisa(brod):
     return brod.zadnji_servis
 
+# Brojenje brodova po tipu za graf
 def statistika_tipova(brodovi):
     tipovi = {}
 
@@ -33,6 +34,7 @@ def statistika_tipova(brodovi):
 
     return tipovi
 
+# Statistika servisa za pie chart
 def statistika_servisa(brodovi):
     servis_u_redu = 0
     servis_kasni = 0
@@ -50,6 +52,7 @@ def statistika_servisa(brodovi):
     
     return servis_u_redu, servis_kasni, bez_servisa
 
+# Podjela brodova po starosti
 def statistika_starosti(brodovi):
     mladi_brodovi = 0
     srednji_brodovi = 0
@@ -69,6 +72,7 @@ def statistika_starosti(brodovi):
     
     return mladi_brodovi, srednji_brodovi, stari_brodovi
 
+# Brodovi koji najduže čekaju na servis
 def brodovi_za_servis(brodovi):
     lista = []
 
@@ -80,11 +84,10 @@ def brodovi_za_servis(brodovi):
 
     return lista[:5]
 
-# Dodavanje broda u bazu
+# Prikaz forme i spremanje novog broda
 @app.route("/dodaj-brod", methods=["GET", "POST"])
-@orm.db_session # omogućuje komunikaciju s bazom
+@orm.db_session
 def dodaj_brod():
-    # GET = prikaz forme, POST = dodavanje broda u bazu
     if request.method == "GET":
         return render_template("dodaj_brod.html")
     
@@ -109,7 +112,6 @@ def dodaj_brod():
                 zadnji_servis = zadnji_servis
             )
 
-            # spremanje promjena u bazu
             orm.commit()
 
             return redirect(url_for("pregled_brodova"))
@@ -120,34 +122,32 @@ def dodaj_brod():
                 "message": str(e)
             }), 400
 
-# Dohvaćanje svih brodova iz baze
+# Popis svih brodova
 @app.route("/brodovi", methods=["GET"])
 @orm.db_session
 def pregled_brodova():
     brodovi = Brod.select()
     return render_template("brodovi.html", brodovi=brodovi)
 
-# Dohvaćanje jednog broda po ID-u
+# Prikaz detalja pojedinog broda
 @app.route("/brod/<int:brod_id>", methods=["GET"])
 @orm.db_session
 def detalji_broda(brod_id):
     brod = Brod.get(id=brod_id)
-    if not brod: # ako brod ne postoji
+    if not brod:
         return jsonify({
             "response": "Error",
             "message": f"Brod s ID-em {brod_id} ne postoji!"
         }), 404
-    
-    # vraćanje podataka o brodu
+
     return render_template("detalji_broda.html", brod=brod)
 
-# Uređivanje postojećeg broda
+# Dohvat postojećih brodova i spremanje izmjena
 @app.route("/uredi-brod/<int:brod_id>", methods=["GET", "POST"])
 @orm.db_session
 def uredi_brod(brod_id):
     brod = Brod.get(id=brod_id)
 
-    # ako brod ne postoji
     if not brod:
         return jsonify({
             "response": "Error",
@@ -163,8 +163,7 @@ def uredi_brod(brod_id):
 
         if datum_servisa:
             zadnji_servis = datetime.strptime(datum_servisa, "%Y-%m-%d")
-
-        # ažuriranje podataka    
+  
         brod.naziv = request.form["naziv"]
         brod.tip = request.form["tip"]
         brod.duljina = float(request.form["duljina"])
@@ -185,7 +184,7 @@ def uredi_brod(brod_id):
             "message": str(e)
         }), 400
 
-# Brisanje broda po ID-u
+# Brisanje odabranog broda
 @app.route("/obrisi-brod/<int:brod_id>", methods=["POST"])
 @orm.db_session
 def obrisi_brod(brod_id):
@@ -195,18 +194,18 @@ def obrisi_brod(brod_id):
             "response": "Error",
             "message": f"Brod s ID-em {brod_id} ne postoji!"
         }), 404
-    
-    # brisanje broda iz baze i spremanje promjena
+
     brod.delete()
     orm.commit()
 
     return redirect(url_for("pregled_brodova"))
 
-
+# Početna stranica
 @app.route("/")
 def pocetna():
     return render_template("pocetna.html")
 
+# Priprema podataka za grafove i tablicu statitike
 @app.route("/statistika")
 @orm.db_session
 def statistika():
@@ -225,6 +224,7 @@ def statistika():
         brodovi_za_servis=lista_servisa
     )
 
+# Vlastita stranica za 404 grešku
 @app.errorhandler(404)
 def stranica_nije_pronadena(error):
     return render_template("404.html"), 404

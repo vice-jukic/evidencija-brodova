@@ -2,12 +2,74 @@
 
 {% block content %}
 
-<h1 class="mb-4">Evidencija Brodova</h1>
+<div class="text-center mt-5">
 
-<p>
-    Web aplikacija za pregled i upravljanje brodovima.
-</p>
+    <h1 class="display-3">Evidencija Brodova</h1>
 
-<a href="/brodovi" class="btn btn-primary">Pregled brodova</a>
-<a href="/dodaj-brod" class="btn btn-success">Dodaj novi brod</a>
+    <p class="lead mt-3">
+        Aplikacija za vođenje evidencije brodova, praćenje servisa i pregled statistike flote.
+    </p>
+
+    <hr class="my-5">
+
+    <div class="row g-4">
+
+        <div class="col-md-4 d-flex">
+            <div class="card shadow-sm p-4 text-center h-100 w-100">
+
+                <h2>Pregled brodova</h2>
+
+                <p class="mt-3">
+                    Prikaz svih evidentiranih brodova i njihovih podataka.
+                </p>
+
+                <div class="mt-auto">
+                    <a href="/brodovi" class="btn btn-primary w-100">
+                        Otvori
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4 d-flex">
+            <div class="card shadow-sm p-4 text-center h-100 w-100">
+
+                <h2>Dodavanje broda</h2>
+
+                <p class="mt-3">
+                    Unos novog broda i njegovih karakteristika.
+                </p>
+
+                <div class="mt-auto">
+                    <a href="/dodaj-brod" class="btn btn-success w-100">
+                        Dodaj
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4 d-flex">
+            <div class="card shadow-sm p-4 text-center h-100 w-100">
+
+                <h2>Statistika</h2>
+
+                <p class="mt-3">
+                    Grafički prikaz podataka i pregled servisnih informacija.
+                </p>
+
+                <div class="mt-auto">
+                    <a href="/statistika" class="btn btn-dark w-100">
+                        Prikaži
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}
