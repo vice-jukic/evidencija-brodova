@@ -1,4 +1,4 @@
 #!/bin/bash
 
 python seed.py
-python app.py
+exec python app.py

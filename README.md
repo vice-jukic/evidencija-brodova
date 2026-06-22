@@ -1,6 +1,6 @@
 # Evidencija brodova  
 
-## 1. Opis projekta
+## Opis projekta
 
 Aplikacija služi za vođenje evidencije brodova te upravljanje njihovim podacima u jedinstvenom sustavu. Sustav omogućuje unos, pregled, izmjenu i brisanje podataka o brodovima, kao i analizu osnovnih statističkih informacija vezanih uz flotu.
 
@@ -8,9 +8,9 @@ Cilj projekta je demonstrirati izgradnju jednostavne web aplikacije s bazom poda
 
 Aplikacija je razvijena koristeći Python Flask framework, Pony ORM-a te SQLite baze podataka.
 
-## 2. Funkcionalnosti
+## Funkcionalnosti
 
-Aplikacija omogućuje osnovno upravljanje podacima o brodovima i pregled informacija vezanih uz njih.
+Aplikacija omogućuje osnovno upravljanje podacima o brodovima i pregled informacija.
 
 U sustavu se može:
 - dodati novi brod s osnovnim podacima (naziv, tip, registracija, dimenzije, godina proizvodnje, oprema)
@@ -28,7 +28,7 @@ Osim osnovnog CRUD dijela, aplikacija računa i prikazuje nekoliko jednostavnih 
 
 Podaci se dodatno prikazuju kroz grafove radi lakšeg pregleda.
 
-## 3. Pokretanje aplikacije lokalno (Docker)
+## Pokretanje aplikacije lokalno (Docker)
 
 Aplikacija se pokreće pomoću Dockera i Docker Composea.
 
@@ -40,10 +40,10 @@ Aplikacija se pokreće pomoću Dockera i Docker Composea.
 ### Koraci
 
 Kloniranje repozitorija  
-git clone https://github.com/USERNAME/REPO_NAME.git  
+git clone https://github.com/vice-jukic/evidencija-brodova  
 
 Ulazak u projekt  
-cd REPO_NAME  
+cd evidencija-brodova  
 
 Pokretanje aplikacije putem Dockera  
 docker-compose up --build  
@@ -60,7 +60,7 @@ docker-compose down
 
 Prvo pokretanje može trajati malo duže jer Docker mora izgraditi kontejnere i postaviti bazu podataka.
 
-## 4. Struktura projekta
+## Struktura projekta
 
 Projekt je organiziran na sljedeći način:
 
@@ -73,7 +73,7 @@ Projekt je organiziran na sljedeći način:
 - seed.py – skripta za inicijalno punjenje baze podataka
 - docker-compose.yml – konfiguracija za pokretanje sustava
 
-## 5. Dokumentacija koda
+## Dokumentacija koda
 
 ### app.py
 
@@ -136,6 +136,6 @@ Sadrži datoteke koje se ne uključuju u Docker build proces (npr. cache, lokaln
 Time se smanjuje veličina kontejnera i ubrzava build proces.
 
 ## Autor
-Ime Prezime  
-JMBAG  
+Ime Prezime: Vice Jukić  
+JMBAG: 0243106543  
 FIPU 2025./2026.
