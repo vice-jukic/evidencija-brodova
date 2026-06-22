@@ -8,6 +8,7 @@ app = Flask(__name__)
 db.bind(provider="sqlite", filename="database.sqlite", create_db=True)
 db.generate_mapping(create_tables=True)
 
+@app.template_filter("format_datum")
 def formatiraj_datum(datum):
     if datum:
         return datum.strftime("%d.%m.%Y.")
@@ -20,8 +21,6 @@ def procitaj_datum_servisa():
         return datetime.strptime(datum_servisa, "%Y-%m-%d")
     
     return None
-
-app.jinja_env.globals.update(formatiraj_datum=formatiraj_datum)
 
 def datum_servisa(brod):
     return brod.zadnji_servis

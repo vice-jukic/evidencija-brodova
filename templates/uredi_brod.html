@@ -3,9 +3,7 @@
 {% block content %}
 
 <h1 class="mb-4">Uredi brod</h1>
-
 <form method="POST">
-
     <div class="mb-3">
         <label class="form-label">Naziv</label>
         <input type="text" name="naziv" class="form-control"
@@ -21,19 +19,16 @@
         <input type="text" name="tip" class="form-control"
                value="{{ brod.tip }}" required>
     </div>
-
     <div class="mb-3">
         <label class="form-label">Duljina (m)</label>
         <input type="number" step="0.1" name="duljina" class="form-control"
                value="{{ brod.duljina }}" required>
     </div>
-
     <div class="mb-3">
         <label class="form-label">Godina proizvodnje</label>
         <input type="number" name="godina" class="form-control"
                value="{{ brod.godina }}" required>
     </div>
-
     <div class="form-check">
         <input type="checkbox"
                name="ima_jedra"
@@ -41,7 +36,6 @@
                {% if brod.ima_jedra %}checked{% endif %}>
         <label class="form-check-label">Ima jedra</label>
     </div>
-
     <div class="form-check mb-3">
         <input type="checkbox"
                name="ima_tende"
@@ -49,12 +43,10 @@
                {% if brod.ima_tende %}checked{% endif %}>
         <label class="form-check-label">Ima tende</label>
     </div>
-
     <div class="mb-3">
         <label class="form-label">Oprema</label>
         <textarea name="oprema" class="form-control" rows="3">{{ brod.oprema }}</textarea>
     </div>
-
     <div class="mb-3">
     <label class="form-label">Zadnji servis</label>
     <input
@@ -63,20 +55,16 @@
         class="form-control"
         value="{% if brod.zadnji_servis %}{{ brod.zadnji_servis.strftime('%Y-%m-%d') }}{% endif %}">
     </div>
-
     <div class="mb-3">
         <label class="form-label">Opis</label>
         <textarea name="opis" class="form-control" rows="4">{{ brod.opis }}</textarea>
     </div>
-
     <button type="submit" class="btn btn-primary">
         Spremi promjene
     </button>
-
     <a href="/brod/{{ brod.id }}" class="btn btn-secondary">
         Odustani
     </a>
-
 </form>
 
 {% endblock %}
