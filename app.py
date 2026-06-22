@@ -10,7 +10,7 @@ db.generate_mapping(create_tables=True)
 
 def formatiraj_datum(datum):
     if datum:
-        return datum.strftime("%d-%m-%Y")
+        return datum.strftime("%d.%m.%Y.")
     return ""
 
 def procitaj_datum_servisa():
@@ -125,6 +125,7 @@ def dodaj_brod():
             
     Brod(
         naziv = request.form["naziv"],
+        registracija = request.form["registracija"],
         tip = request.form["tip"],
         duljina = float(request.form["duljina"]),
         godina = int(request.form["godina"]),
@@ -153,6 +154,7 @@ def uredi_brod(brod_id):
     zadnji_servis = procitaj_datum_servisa()
   
     brod.naziv = request.form["naziv"]
+    brod.registracija = request.form["registracija"]
     brod.tip = request.form["tip"]
     brod.duljina = float(request.form["duljina"])
     brod.godina = int(request.form["godina"])

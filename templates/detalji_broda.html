@@ -7,6 +7,7 @@
 <div calss="card">
     <div class="card-body">
         <p><strong>Tip:</strong> {{ brod.tip }}</p>
+        <p><strong>Registracija</strong> {{ brod.registracija }}</p>
         <p><strong>Duljina:</strong> {{ brod.duljina }}m</p>
         <p><strong>Godina:</strong> {{ brod.godina }}</p>
         <p>
@@ -29,7 +30,7 @@
         <p>
             <strong>Zadnji servis:</strong>
             {% if brod.zadnji_servis %}
-                {{ brod.zadnji_servis.strftime("%d-%m-%Y") }}
+                {{ brod.zadnji_servis.strftime("%d.%m.%Y.") }}
             {% else %}
                 Nije evidentirano
             {% endif %}

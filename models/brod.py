@@ -6,6 +6,7 @@ db = orm.Database()
 class Brod(db.Entity):
     id = orm.PrimaryKey(int, auto=True)
     naziv = orm.Required(str)
+    registracija = orm.Required(str)
     tip = orm.Required(str)
     duljina = orm.Required(float)
     godina = orm.Required(int)

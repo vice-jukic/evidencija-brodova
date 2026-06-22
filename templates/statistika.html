@@ -43,6 +43,7 @@
                 <thead>
                     <tr>
                         <th>Naziv</th>
+                        <th>Registracija</th>
                         <th>Tip</th>
                         <th>Zadnji servis</th>
                     </tr>
@@ -51,6 +52,7 @@
                     {% for brod in brodovi_za_servis %}
                     <tr>
                         <td>{{ brod.naziv }}</td>
+                        <td>{{ brod.registracija }}</td>
                         <td>{{ brod.tip }}</td>
                         <td>{{ formatiraj_datum(brod.zadnji_servis) }}</td>
                     </tr>
