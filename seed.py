@@ -1,6 +1,5 @@
 from pony import orm
 from datetime import datetime
-from app import db
 from models.brod import Brod
 
 podaci = [
@@ -42,3 +41,5 @@ def init_seed():
         return
     for brod in podaci:
         Brod(**brod)
+    
+    orm.commit()

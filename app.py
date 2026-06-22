@@ -1,5 +1,4 @@
 from models import db, Brod
-from seed import init_seed
 from services.statistika_service import (statistika_tipova, statistika_servisa, statistika_starosti, brodovi_za_servis)
 from utils.datum_utils import (formatiraj_datum, procitaj_datum_servisa)
 from flask import Flask, render_template, request, redirect, url_for
@@ -130,5 +129,6 @@ def stranica_nije_pronadena(error):
     return render_template("404.html"), 404
 
 if __name__ == "__main__":
+    from seed import init_seed
     init_seed()
     app.run(host="0.0.0.0", port=5000)
