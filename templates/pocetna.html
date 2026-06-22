@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="text-center mt-5">
-    <h1 class="display-3">Evidencija Brodova</h1>
+    <h1 class="display-3 mb-4">Evidencija Brodova</h1>
     <p class="lead mt-3">
         Aplikacija za vođenje evidencije brodova, praćenje servisa i pregled statistike flote.
     </p>
@@ -42,7 +42,7 @@
                     Prikaz svih evidentiranih brodova i njihovih podataka.
                 </p>
                 <div class="mt-auto">
-                    <a href="/brodovi" class="btn btn-primary w-100">
+                    <a href="{{ url_for('pregled_brodova') }}" class="btn btn-primary w-100">
                         Otvori
                     </a>
                 </div>
@@ -55,7 +55,7 @@
                     Unos novog broda i njegovih karakteristika.
                 </p>
                 <div class="mt-auto">
-                    <a href="/dodaj-brod" class="btn btn-success w-100">
+                    <a href="{{ url_for('dodaj_brod') }}" class="btn btn-success w-100">
                         Dodaj
                     </a>
                 </div>
@@ -68,7 +68,7 @@
                     Grafički prikaz podataka i pregled servisnih informacija.
                 </p>
                 <div class="mt-auto">
-                    <a href="/statistika" class="btn btn-dark w-100">
+                    <a href="{{ url_for('statistika') }}" class="btn btn-dark w-100">
                         Prikaži
                     </a>
                 </div>
@@ -76,6 +76,5 @@
         </div>
     </div>
 </div>
-<hr>
 
 {% endblock %}

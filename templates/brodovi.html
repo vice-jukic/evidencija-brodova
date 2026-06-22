@@ -11,6 +11,7 @@
             <th>Registracija</th>
             <th>Tip</th>
             <th>Duljina</th>
+            <th>Opcije</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +23,10 @@
             <td>{{ brod.tip }}</td>
             <td>{{ brod.duljina }}m</td>
             <td>
-                <a href="/brod/{{ brod.id }}" class="btn btn-primary btn-sm">Detalji</a>
+                <a href="{{ url_for('detalji_broda', brod_id=brod.id) }}" class="btn btn-primary btn-sm">Detalji</a>
+                <form action="{{ url_for('obrisi_brod', brod_id=brod.id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Obriši</button>
+                </form>
             </td>
         </tr>
         {% endfor %}

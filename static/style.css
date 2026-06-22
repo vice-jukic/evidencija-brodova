@@ -1,0 +1,15 @@
+canvas {
+    max-height: 300px;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    height: 100%;
+}
+
+.row {
+    align-items: stretch;
+}

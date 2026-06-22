@@ -4,7 +4,7 @@
 
 <h1 class="mb-4">{{ brod.naziv }}</h1>
 
-<div calss="card">
+<div class="card">
     <div class="card-body">
         <p><strong>Tip:</strong> {{ brod.tip }}</p>
         <p><strong>Registracija</strong> {{ brod.registracija }}</p>
@@ -30,7 +30,7 @@
         <p>
             <strong>Zadnji servis:</strong>
             {% if brod.zadnji_servis %}
-                {{ brod.zadnji_servis.strftime("%d.%m.%Y.") }}
+                {{ brod.zadnji_servis | format_datum }}
             {% else %}
                 Nije evidentirano
             {% endif %}
@@ -40,10 +40,10 @@
     </div>
 </div>
 <div class="mt-4">
-    <a href="/uredi-brod/{{ brod.id }}" class="btn btn-warning">Uredi</a>
-    <form action="/obrisi-brod/{{ brod.id }}" method="POST" class="d-inline">
+    <a href="{{ url_for('uredi_brod', brod_id=brod.id) }}" class="btn btn-warning">Uredi</a>
+    <form action="{{ url_for('obrisi_brod', brod_id=brod.id) }}" method="POST" class="d-inline">
         <button type="submit" class="btn btn-danger">Obriši</button>
     </form>
-    <a href="/brodovi" class="btn btn-secondary">Natrag na popis</a>
+    <a href="{{ url_for('pregled_brodova') }}" class="btn btn-secondary">Natrag na popis</a>
 </div>
 {% endblock %}

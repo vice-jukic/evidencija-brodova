@@ -3,20 +3,6 @@
 {% block content %}
 
 <h1 class="mb-4">Statistika</h1>
-<style>
-    canvas {
-        max-height: 300px;
-    }
-
-    .card {
-        height: 100%;
-    }
-
-    .row {
-        align-items: stretch;
-    }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="row">
     <div class="col-md-6 mb-4 d-flex">
         <div class="card p-3 w-100">
@@ -64,6 +50,11 @@
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     const labels = {{ tipovi.keys() | list | tojson | safe }};
@@ -117,6 +108,5 @@
         }
     });
 </script>
-<hr>
 
 {% endblock %}
