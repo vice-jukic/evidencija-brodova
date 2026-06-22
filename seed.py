@@ -38,6 +38,8 @@ podaci = [
 
 @orm.db_session
 def dodaj_podatke():
+    if Brod.select().count() > 0:
+        return
     for brod in podaci:
         Brod(**brod)
     
