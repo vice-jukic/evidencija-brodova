@@ -36,14 +36,13 @@ podaci = [
     {"naziv":"Delfin", "registracija":"PU-3746", "tip":"Gliser","duljina":6.9,"godina":2017,"ima_jedra":False,"ima_tende":True,"oprema":"Sprayhood, GPS", "zadnji_servis": datetime(2025, 6, 24), "opis":"Mali gliser za brzu vožnju i vodene sportove."}
 ]
 
-if Brod.exists():
-    Brod.drop_table(with_all_data=True)
-
-Brod.create_table()
-
 @orm.db_session
 def dodaj_podatke():
+    if Brod.select().count() > 0:
+        return
     for brod in podaci:
         Brod(**brod)
+    
+    orm.commit()
 
 dodaj_podatke()
