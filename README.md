@@ -28,6 +28,10 @@ Osim osnovnog CRUD dijela, aplikacija računa i prikazuje nekoliko jednostavnih 
 
 Podaci se dodatno prikazuju kroz grafove radi lakšeg pregleda.
 
+## Dijagram slučajeva korištenja
+
+![Use case dijagram](usecase.png)
+
 ## Pokretanje aplikacije lokalno (Docker)
 
 Aplikacija se pokreće pomoću Dockera i Docker Composea.
