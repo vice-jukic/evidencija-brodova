@@ -37,12 +37,8 @@ podaci = [
 ]
 
 @orm.db_session
-def dodaj_podatke():
+def init_seed():
     if Brod.select().count() > 0:
         return
     for brod in podaci:
         Brod(**brod)
-    
-    orm.commit()
-
-dodaj_podatke()

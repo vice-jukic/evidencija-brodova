@@ -107,11 +107,6 @@ Pomoćne funkcije koje se koriste u aplikaciji:
 Skripta za inicijalno punjenje baze podacima.  
 Koristi se samo po potrebi (npr. prvi start aplikacije ili testiranje), kako bi se dobio početni skup brodova bez ručnog unosa.
 
-### start.sh
-
-Ako se koristi, služi kao jednostavan ulazni skript za pokretanje aplikacije ili Docker kontejnera.  
-Omogućuje da se aplikacija pokrene jednom komandom bez ručnog upisivanja više koraka.
-
 ### .gitignore
 
 Definira datoteke koje se ne verzioniraju na GitHubu, uključujući lokalnu SQLite bazu (`database.sqlite`) i ostale privremene datoteke.
