@@ -38,11 +38,10 @@ podaci = [
 
 @orm.db_session
 def dodaj_podatke():
-    if Brod.select().count() > 0:
-        return
+    if Brod.exists():
+        Brod.drop_table(with_all_data=True)
+        Brod.create_table()
     for brod in podaci:
         Brod(**brod)
-    
-    orm.commit()
 
 dodaj_podatke()
