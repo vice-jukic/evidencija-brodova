@@ -202,8 +202,26 @@ def obrisi_brod(brod_id):
 
 # Početna stranica
 @app.route("/")
+@orm.db_session
 def pocetna():
-    return render_template("pocetna.html")
+    brodovi = list(Brod.select())
+
+    ukupno_brodova = len(brodovi)
+
+    tipovi = []
+
+    for brod in brodovi:
+        if brod.tip not in tipovi:
+            tipovi.append(brod.tip)
+    
+    broj_tipova = len(tipovi)
+
+    servis_u_redu, servis_kasni, bez_servisa = statistika_servisa(brodovi)
+
+    return render_template(
+        "pocetna.html",
+        ukupno_brodova=ukupno_brodova, servis_kasni=servis_kasni, bez_servisa=bez_servisa, broj_tipova=broj_tipova
+        )
 
 # Priprema podataka za grafove i tablicu statitike
 @app.route("/statistika")

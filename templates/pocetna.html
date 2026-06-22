@@ -3,73 +3,79 @@
 {% block content %}
 
 <div class="text-center mt-5">
-
     <h1 class="display-3">Evidencija Brodova</h1>
-
     <p class="lead mt-3">
         Aplikacija za vođenje evidencije brodova, praćenje servisa i pregled statistike flote.
     </p>
-
+    <div class="row g-4 mt-5">
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <h5>Ukupno brodova</h5>
+                <h2>{{ ukupno_brodova }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <h5>Servis kasni</h5>
+                <h2>{{ servis_kasni }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <h5>Bez servisa</h5>
+                <h2>{{ bez_servisa }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <h5>Tipovi brodova</h5>
+                <h2>{{ broj_tipova }}</h2>
+            </div>
+        </div>
+    </div>
     <hr class="my-5">
-
     <div class="row g-4">
-
         <div class="col-md-4 d-flex">
             <div class="card shadow-sm p-4 text-center h-100 w-100">
-
                 <h2>Pregled brodova</h2>
-
                 <p class="mt-3">
                     Prikaz svih evidentiranih brodova i njihovih podataka.
                 </p>
-
                 <div class="mt-auto">
                     <a href="/brodovi" class="btn btn-primary w-100">
                         Otvori
                     </a>
                 </div>
-
             </div>
         </div>
-
         <div class="col-md-4 d-flex">
             <div class="card shadow-sm p-4 text-center h-100 w-100">
-
                 <h2>Dodavanje broda</h2>
-
                 <p class="mt-3">
                     Unos novog broda i njegovih karakteristika.
                 </p>
-
                 <div class="mt-auto">
                     <a href="/dodaj-brod" class="btn btn-success w-100">
                         Dodaj
                     </a>
                 </div>
-
             </div>
         </div>
-
         <div class="col-md-4 d-flex">
             <div class="card shadow-sm p-4 text-center h-100 w-100">
-
                 <h2>Statistika</h2>
-
                 <p class="mt-3">
                     Grafički prikaz podataka i pregled servisnih informacija.
                 </p>
-
                 <div class="mt-auto">
                     <a href="/statistika" class="btn btn-dark w-100">
                         Prikaži
                     </a>
                 </div>
-
             </div>
         </div>
-
     </div>
-
 </div>
+<hr>
 
 {% endblock %}
