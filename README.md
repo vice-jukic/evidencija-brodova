@@ -135,6 +135,6 @@ Sadrži datoteke koje se ne uključuju u Docker build proces (npr. cache, lokaln
 Time se smanjuje veličina kontejnera i ubrzava build proces.
 
 ## Autor
-Ime Prezime: Vice Jukić  
+Ime: Vice Jukić  
 JMBAG: 0243106543  
 FIPU 2025./2026.
